@@ -23,7 +23,7 @@ images:
     service: jenkins
     source: jenkins/jenkins
     channel: stable
-    sort: created
+    sort: updated
     tag_regex: '^[0-9]+\.[0-9]+[0-9.]*$'
     delivery:
       mode: mirror
