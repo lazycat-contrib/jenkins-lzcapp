@@ -18,12 +18,11 @@ application:
           params:
             user: "{{ .U.jenkins_admin_user }}"
             password: "{{ .U.jenkins_admin_password }}"
-
 services:
   jenkins:
     # jenkins/jenkins:2.578
     # upstream: jenkins/jenkins:2.578
-    image: registry.lazycat.cloud/czyt/jenkins/jenkins:2.578
+    image: docker.1ms.run/jenkins/jenkins:2.578
     restart: unless-stopped
     environment:
       JAVA_OPTS: -Xmx1g -Xms512m
@@ -45,19 +44,17 @@ services:
     setup_script: |
       install -d -m 0755 /usr/share/jenkins/ref/init.groovy.d
       cp /lzcapp/pkg/content/init-admin.groovy /usr/share/jenkins/ref/init.groovy.d/init-admin.groovy
-
   agent:
     # jenkins/ssh-agent:8.9.0
     # upstream: jenkins/ssh-agent:8.9.0
-    image: registry.lazycat.cloud/czyt/jenkins/ssh-agent:8.9.0
+    image: docker.1ms.run/jenkins/ssh-agent:8.9.0
     restart: unless-stopped
     environment:
       JENKINS_AGENT_SSH_PUBKEY: "{{ .U.jenkins_agent_ssh_pubkey }}"
     depends_on:
       jenkins:
         condition: service_healthy
-
-usage: |
+usage: |-
   Jenkins 是一个开源的持续集成/持续交付（CI/CD）自动化服务器。
   通过 Web 界面管理流水线、构建任务和部署流程。
 
