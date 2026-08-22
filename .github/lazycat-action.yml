@@ -22,6 +22,7 @@ images:
     target: service
     service: jenkins
     source: jenkins/jenkins
+    channel: custom
     sort: updated
     tag_regex: '^[0-9]+\.[0-9]+$'
     version_regex: '(?P<version>[0-9]+\.[0-9]+)'
