@@ -1,0 +1,33 @@
+params:
+  - id: jenkins_admin_user
+    type: string
+    name: "Admin User"
+    description: "Jenkins administrator username"
+    default_value: "admin"
+    optional: false
+
+  - id: jenkins_admin_password
+    type: secret
+    name: "Admin Password"
+    description: "Jenkins administrator password"
+    default_value: "$random(len=20)"
+    optional: false
+
+  - id: jenkins_agent_ssh_pubkey
+    type: string
+    name: "SSH Agent Public Key"
+    description: "Public key for SSH build agent (leave empty to configure later)"
+    default_value: ""
+    optional: true
+
+locales:
+  zh:
+    jenkins_admin_user:
+      name: "管理员用户名"
+      description: "Jenkins 管理员登录用户名"
+    jenkins_admin_password:
+      name: "管理员密码"
+      description: "Jenkins 管理员登录密码"
+    jenkins_agent_ssh_pubkey:
+      name: "SSH 代理公钥"
+      description: "SSH 构建代理的公钥（留空可后续配置）"

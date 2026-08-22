@@ -1,0 +1,48 @@
+version: 1
+
+project:
+  root: .
+  build_config: lzc-build.yml
+  package_file: package.yml
+  output: dist/jenkins.lpk
+  target_arch: amd64
+
+update:
+  strategy: publish
+  allow_downgrade: false
+  version_source:
+    type: image
+    image: jenkins
+
+build:
+  run_buildscript: false
+
+images:
+  - id: jenkins
+    target: service
+    service: jenkins
+    source: jenkins/jenkins
+    channel: stable
+    sort: created
+    tag_regex: '^[0-9]+\.[0-9]+[0-9.]*$'
+    delivery:
+      mode: mirror
+
+  - id: agent
+    target: service
+    service: agent
+    source: jenkins/ssh-agent
+    channel: stable
+    sort: semver
+    tag_regex: '^[0-9]+\.[0-9]+\.[0-9]+$'
+    delivery:
+      mode: mirror
+
+stores:
+  official:
+    enabled: false
+  private:
+    enabled: true
+    skip_if_version_exists: true
+    name: Jenkins
+    summary: "Jenkins CI/CD automation server for LazyCat"

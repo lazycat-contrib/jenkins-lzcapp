@@ -1,0 +1,16 @@
+package: community.lazycat.app.jenkins
+version: 2.578.0
+name: Jenkins
+description: "The leading open-source automation server for CI/CD"
+min_os_version: 1.5.0
+author: jenkinsci
+license: MIT
+homepage: https://www.jenkins.io/
+
+locales:
+  zh:
+    name: "Jenkins"
+    description: "领先的开源持续集成与持续交付自动化服务器"
+  en:
+    name: "Jenkins"
+    description: "The leading open-source automation server for CI/CD"

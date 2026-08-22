@@ -1,0 +1,73 @@
+application:
+  subdomain: jenkins
+  public_path:
+    - /
+  upstreams:
+    - location: /
+      backend: http://jenkins:8080/
+  ingress:
+    - port: 50000
+      protocol: tcp
+  injects:
+    - id: login-autofill
+      when:
+        - /login
+        - /login?
+      do:
+        - src: builtin://simple-inject-password
+          params:
+            user: "{{ .U.jenkins_admin_user }}"
+            password: "{{ .U.jenkins_admin_password }}"
+
+services:
+  jenkins:
+    # jenkins/jenkins:2.578
+    # upstream: jenkins/jenkins:2.578
+    image: registry.lazycat.cloud/czyt/jenkins/jenkins:2.578
+    restart: unless-stopped
+    environment:
+      JAVA_OPTS: -Xmx1g -Xms512m
+      JENKINS_ADMIN_USER: "{{ .U.jenkins_admin_user }}"
+      JENKINS_ADMIN_PASSWORD: "{{ .U.jenkins_admin_password }}"
+      JENKINS_URL: "http://localhost:8080/"
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/login
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    binds:
+      - /lzcapp/var/jenkins_home:/var/jenkins_home
+    setup_script: |
+      install -d -m 0755 /usr/share/jenkins/ref/init.groovy.d
+      cp /lzcapp/pkg/content/init-admin.groovy /usr/share/jenkins/ref/init.groovy.d/init-admin.groovy
+
+  agent:
+    # jenkins/ssh-agent:8.9.0
+    # upstream: jenkins/ssh-agent:8.9.0
+    image: registry.lazycat.cloud/czyt/jenkins/ssh-agent:8.9.0
+    restart: unless-stopped
+    environment:
+      JENKINS_AGENT_SSH_PUBKEY: "{{ .U.jenkins_agent_ssh_pubkey }}"
+    depends_on:
+      jenkins:
+        condition: service_healthy
+
+usage: |
+  Jenkins 是一个开源的持续集成/持续交付（CI/CD）自动化服务器。
+  通过 Web 界面管理流水线、构建任务和部署流程。
+
+  首次启动后：
+  1. 使用部署时配置的管理员用户名和密码登录
+  2. 在 "系统管理 → 节点管理" 中配置 SSH 构建代理（需在部署时配置 SSH 公钥）
+  3. 创建新任务或导入已有流水线
+
+  Jenkins is an open-source CI/CD automation server.
+  After first launch:
+  1. Login with the admin credentials configured during deployment
+  2. Configure SSH build agents in "Manage Jenkins → Nodes" (requires SSH public key)
+  3. Create new jobs or import existing pipelines
