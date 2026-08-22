@@ -22,9 +22,9 @@ images:
     target: service
     service: jenkins
     source: jenkins/jenkins
-    channel: custom
-    tag_regex: '^\d+\.\d+$'
-    version_regex: '(?P<version>\d+\.\d+)'
+    sort: updated
+    tag_regex: '^[0-9]+\.[0-9]+$'
+    version_regex: '(?P<version>[0-9]+\.[0-9]+)'
     version_template: '{version}.0'
     delivery:
       mode: mirror
