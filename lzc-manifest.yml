@@ -21,8 +21,8 @@ application:
 services:
   jenkins:
     # jenkins/jenkins:2.578
-    # upstream: jenkins/jenkins:2.588
-    image: docker.1ms.run/jenkins/jenkins:2.588
+    # upstream: jenkins/jenkins:2.589
+    image: docker.1ms.run/jenkins/jenkins:2.589
     restart: unless-stopped
     environment:
       JAVA_OPTS: -Xmx1g -Xms512m
